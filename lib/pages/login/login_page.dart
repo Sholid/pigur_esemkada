@@ -1,0 +1,180 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_app_prjct/pages/admin/home_admin.dart';
+import 'package:flutter_app_prjct/pages/login/controller.dart';
+import 'package:get_storage/get_storage.dart';
+//import 'package:flutter_app_prjct/pages/registerasi.dart';
+// part 'controller.dart';
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  static const String route = "/login";
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  // get c => null;
+  late final LoginController c;
+  // Variable inputan
+  TextEditingController _user = TextEditingController();
+  TextEditingController _password = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    c = LoginController();
+  }
+
+  final box = GetStorage();
+
+  final dio = Dio(BaseOptions(headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  }));
+
+  void ceklogin() async {
+    // try {
+    var response = await dio.post(
+      "https://t9xfkx7g-80.asse.devtunnels.ms/Api_pigur/user/login.php",
+      data: FormData.fromMap({
+        'username': _user.text,
+        'password': _password.text,
+      }),
+    );
+    print('ghi');
+    print(response.data);
+    if (response.statusCode == 200) {
+      var jsonResponse = response.data;
+      if (jsonResponse['status'] == 1) {
+        box.write('nama', jsonResponse['data']['nama']);
+        box.write('nip', jsonResponse['data']['nip']);
+        Navigator.pushNamed(context, Admin.route);
+      } else {
+        print('Gagal');
+      }
+    } else {
+      print("Gagal : ${response.statusCode}");
+    }
+    // } catch (e) {
+    //   print("Error : $e");
+    // }
+  }
+
+  // Future ceklogin() async {
+  //   var response;
+  //   // var uri = Uri.parse('http://localhost/API_belajarflutter/insert.php');
+  //   var uri = Uri.parse('http://192.168.14.182/Api_pigur/user/login.php');
+  //   response = await http.post(uri, body: {
+  //     "username": _user.text,
+  //     "password": _password.text,
+  //   });
+  //   if (response.statusCode == 200) {
+  //     print('Sukses');
+  //   } else {
+  //     print('Gagal');
+  //   }
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "PIKET GURU",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.blue,
+        centerTitle: true,
+        shadowColor: Colors.black,
+        elevation: 10,
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Form(
+            key: c.formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset(
+                    'assets/img/logo.png',
+                    height: 150,
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    child: Center(
+                      child: Text(" Welcome to",
+                          style:
+                              TextStyle(color: Colors.orangeAccent, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  Container(
+                    child: Center(
+                        child: Text(" SMK Negeri 2 Kraksaan",
+                            style: TextStyle(
+                                color: Colors.orangeAccent, fontWeight: FontWeight.bold))),
+                  ),
+                  SizedBox(height: 30),
+                  Container(
+                    child: Center(child: Text(" Please Log In to continue")),
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    // panggil varible username dan pass
+                    controller: _user,
+                    // keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                      labelText: 'Username',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Username tidak boleh kosong';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    obscureText: true,
+                    controller: _password,
+                    decoration: const InputDecoration(
+                      suffixIcon: Icon(Icons.remove_red_eye),
+                      labelText: 'Password',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Password tidak boleh kosong';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () => ceklogin(),
+                      child: const Text(style: TextStyle(fontWeight: FontWeight.w500), 'Login'),
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                    ),
+                  ),
+                  const SizedBox(height: 45),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
