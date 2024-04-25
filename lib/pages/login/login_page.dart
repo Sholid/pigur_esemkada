@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_prjct/pages/admin/home_admin.dart';
 import 'package:flutter_app_prjct/pages/login/controller.dart';
 import 'package:get_storage/get_storage.dart';
-//import 'package:flutter_app_prjct/pages/registerasi.dart';
-// part 'controller.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -81,19 +80,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "PIKET GURU",
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: Colors.blue,
-        centerTitle: true,
-        shadowColor: Colors.black,
-        elevation: 10,
-      ),
       body: Center(
         child: SingleChildScrollView(
           child: Form(
@@ -107,32 +93,47 @@ class _LoginPageState extends State<LoginPage> {
                     'assets/img/logo.png',
                     height: 150,
                   ),
-                  const SizedBox(height: 16),
-                  Container(
-                    child: Center(
-                      child: Text(" Welcome to",
-                          style:
-                              TextStyle(color: Colors.orangeAccent, fontWeight: FontWeight.bold)),
+                  Text(
+                    "Log In",
+                    style: GoogleFonts.inter(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
                     ),
                   ),
-                  Container(
-                    child: Center(
-                        child: Text(" SMK Negeri 2 Kraksaan",
-                            style: TextStyle(
-                                color: Colors.orangeAccent, fontWeight: FontWeight.bold))),
+                  const SizedBox(height: 16),
+                  Center(
+                    child: Text(
+                      "Selamat datang di",
+                      style: GoogleFonts.inter(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
-                  SizedBox(height: 30),
-                  Container(
-                    child: Center(child: Text(" Please Log In to continue")),
+                  const SizedBox(
+                    height: 12,
                   ),
-                  const SizedBox(height: 20),
+                  Center(
+                    child: Text(
+                      "SMK NEGERI 2 KRAKSAAN",
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
                   TextFormField(
                     // panggil varible username dan pass
                     controller: _user,
                     // keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       labelText: 'Username',
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8))),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -148,7 +149,8 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: const InputDecoration(
                       suffixIcon: Icon(Icons.remove_red_eye),
                       labelText: 'Password',
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8))),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -160,12 +162,20 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
                     child: ElevatedButton(
                       onPressed: () => ceklogin(),
-                      child: const Text(style: TextStyle(fontWeight: FontWeight.w500), 'Login'),
                       style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                        backgroundColor: const Color(0xFFF1852E),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
+                      child: Text(
+                          style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: Colors.white),
+                          'Login'),
                     ),
                   ),
                   const SizedBox(height: 45),

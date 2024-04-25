@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_prjct/pages/addguru.dart';
 import 'package:flutter_app_prjct/pages/login/login_page.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Admin extends StatefulWidget {
   static const route = "/Admin";
@@ -17,156 +18,250 @@ class _AdminState extends State<Admin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "ADMIN",
-            style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w500),
-          ),
-          backgroundColor: Colors.blue,
-          centerTitle: true,
-          shadowColor: Colors.black,
-          elevation: 10,
-        ),
+        backgroundColor: Colors.white,
         body: ListView(
           children: [
             SizedBox(height: 16),
             Container(
+              decoration: BoxDecoration(color: Colors.white),
               padding: EdgeInsets.only(left: 24, right: 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(18),
-                    decoration: BoxDecoration(color: Colors.orange[500]),
-                    child: Center(
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                child: Text(" Nama",
-                                    style: TextStyle(
-                                        color: Colors.black, fontWeight: FontWeight.bold)),
-                              ),
-                              Container(
-                                  child: Text(" NIP",
-                                      style: TextStyle(
-                                          color: Colors.black, fontWeight: FontWeight.bold))),
-                            ],
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color.fromARGB(255, 231, 231, 231),
+                          offset: Offset(0, 10),
+                          blurRadius: 15,
+                          spreadRadius: -3,
+                        ),
+                        BoxShadow(
+                          color: Color.fromARGB(255, 231, 231, 231),
+                          offset: Offset(0, 4),
+                          blurRadius: 6,
+                          spreadRadius: 0,
+                        ),
+                      ],
+                      border:
+                          Border.all(color: const Color(0xFFF1852E), width: 1),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF1852E),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                child: Text(": " + box.read('nama'),
-                                    style: TextStyle(
-                                        color: Colors.black, fontWeight: FontWeight.bold)),
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              box.read('nama'),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
                               ),
-                              Container(
-                                  child: Text(": " + box.read('nip'),
-                                      style: TextStyle(
-                                          color: Colors.black, fontWeight: FontWeight.bold))),
-                            ],
-                          ),
-                        ],
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              "NIP. " + box.read('nip'),
+                              style: GoogleFonts.inter(
+                                fontSize: 14,
+                                color: const Color(0xFF4B5563),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.location_on_outlined,
+                                  color: Color(0xFF4B5563),
+                                  size: 16,
+                                ),
+                                Text(
+                                  "Admin",
+                                  style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: const Color(0xFF4B5563),
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    "Data guru",
+                    style: GoogleFonts.inter(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 14,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                      hintText: "Cari data guru",
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Color(0xFF9CA3AF),
+                      ),
+                      hintStyle: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xFF9CA3AF)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Color(0xFFF3F4F6),
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
-                  // list view Builder..........................................................
+                  const SizedBox(
+                    height: 16,
+                  ),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: 5,
                     itemBuilder: (context, index) {
                       return Container(
-                        height: 98,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          boxShadow: [
+                        margin: const EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
+                          boxShadow: const [
                             BoxShadow(
-                              offset: Offset(
-                                5.0,
-                                5.0,
-                              ),
-                              blurRadius: 10.0,
-                              spreadRadius: 1.0,
+                              color: Color.fromARGB(255, 231, 231, 231),
+                              offset: Offset(0, 10),
+                              blurRadius: 15,
+                              spreadRadius: -3,
                             ),
                             BoxShadow(
-                              color: Colors.white,
-                              offset: Offset(0.0, 0.0),
-                              blurRadius: 0.0,
-                              spreadRadius: 0.0,
+                              color: Color.fromARGB(255, 231, 231, 231),
+                              offset: Offset(0, 4),
+                              blurRadius: 6,
+                              spreadRadius: 0,
                             ),
                           ],
                         ),
-                        padding: const EdgeInsets.fromLTRB(18, 20, 18, 20),
-                        margin: const EdgeInsets.fromLTRB(12, 0, 12, 10),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      "NAMA",
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      "NIP ",
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 12,
-                                  ),
-                                ],
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF1852E),
+                                borderRadius: BorderRadius.circular(12),
                               ),
                             ),
                             const SizedBox(
-                              width: 22,
+                              width: 12,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  box.read('nama'),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xFF1F2A37),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  "NIP. " + box.read('nip'),
+                                  style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: const Color(0xFF4B5563),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  "Admin",
+                                  style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: const Color(0xFF4B5563),
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       );
                     },
                   ),
-
+                  const SizedBox(
+                    height: 12,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.popAndPushNamed(context, Guru.route);
+                            Navigator.pushNamed(context, Guru.route);
                           },
                           style: ElevatedButton.styleFrom(
-                              shape:
-                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-                          child: Text(style: TextStyle(fontWeight: FontWeight.w500), "Tambah Guru"),
+                              backgroundColor: const Color(0xFFF1852E),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100))),
+                          child: Text(
+                            "Tambah",
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
-                      SizedBox(width: 5),
+                      const SizedBox(width: 5),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.popAndPushNamed(context, LoginPage.route);
+                            Navigator.pushNamed(context, LoginPage.route);
                           },
                           style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFF1852E),
                               shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          )),
-                          child: Text(style: TextStyle(fontWeight: FontWeight.w500), "Logout"),
+                                  borderRadius: BorderRadius.circular(100))),
+                          child: Text(
+                            "Logout",
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                     ],
