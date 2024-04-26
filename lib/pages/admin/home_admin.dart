@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_prjct/pages/addguru.dart';
 import 'package:flutter_app_prjct/pages/login/login_page.dart';
+import 'package:flutter_app_prjct/service/guru_service.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -47,8 +48,7 @@ class _AdminState extends State<Admin> {
                           spreadRadius: 0,
                         ),
                       ],
-                      border:
-                          Border.all(color: const Color(0xFFF1852E), width: 1),
+                      border: Border.all(color: const Color(0xFFF1852E), width: 1),
                     ),
                     child: Row(
                       children: [
@@ -56,7 +56,11 @@ class _AdminState extends State<Admin> {
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFF1852E),
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    "https://t9xfkx7g-80.asse.devtunnels.ms/Api_pigur/" +
+                                        box.read('foto')),
+                                fit: BoxFit.fitHeight),
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
@@ -143,82 +147,106 @@ class _AdminState extends State<Admin> {
                   const SizedBox(
                     height: 16,
                   ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.white,
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 231, 231, 231),
-                              offset: Offset(0, 10),
-                              blurRadius: 15,
-                              spreadRadius: -3,
-                            ),
-                            BoxShadow(
-                              color: Color.fromARGB(255, 231, 231, 231),
-                              offset: Offset(0, 4),
-                              blurRadius: 6,
-                              spreadRadius: 0,
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF1852E),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  box.read('nama'),
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xFF1F2A37),
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                  // manggil data user
+                  FutureBuilder(
+                      future: GuruService().getGuru(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              /// Varibale snapshot
+                              final item = snapshot.data![index];
+                              return Container(
+                                margin: const EdgeInsets.only(bottom: 8),
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color.fromARGB(255, 231, 231, 231),
+                                      offset: Offset(0, 10),
+                                      blurRadius: 15,
+                                      spreadRadius: -3,
+                                    ),
+                                    BoxShadow(
+                                      color: Color.fromARGB(255, 231, 231, 231),
+                                      offset: Offset(0, 4),
+                                      blurRadius: 6,
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(
-                                  height: 16,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      // menampilkan foto
+
+                                      width: 80,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                                "https://t9xfkx7g-80.asse.devtunnels.ms/Api_pigur/" +
+                                                    item.foto),
+                                            fit: BoxFit.fitHeight),
+                                        color: Color.fromRGBO(255, 255, 254, 1),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 12,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          // disi sesuai class Guru_model
+                                          // menampilkan nama
+                                          item.nama,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Color(0xFF1F2A37),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                        Text(
+                                          "NIP. " + item.nip,
+                                          style: GoogleFonts.inter(
+                                            fontSize: 14,
+                                            color: const Color(0xFF4B5563),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        Text(
+                                          // ignore: prefer_interpolation_to_compose_strings
+                                          "Telpon. " + item.telp,
+                                          style: GoogleFonts.inter(
+                                            fontSize: 14,
+                                            color: const Color(0xFF4B5563),
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  "NIP. " + box.read('nip'),
-                                  style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: const Color(0xFF4B5563),
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                Text(
-                                  "Admin",
-                                  style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: const Color(0xFF4B5563),
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                              );
+                            },
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        } else {
+                          return Text("Loading");
+                        }
+                      }),
+
                   const SizedBox(
                     height: 12,
                   ),
@@ -232,8 +260,8 @@ class _AdminState extends State<Admin> {
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFF1852E),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100))),
+                              shape:
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
                           child: Text(
                             "Tambah",
                             style: GoogleFonts.poppins(
@@ -252,8 +280,8 @@ class _AdminState extends State<Admin> {
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFF1852E),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100))),
+                              shape:
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
                           child: Text(
                             "Logout",
                             style: GoogleFonts.poppins(

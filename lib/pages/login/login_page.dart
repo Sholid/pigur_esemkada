@@ -52,10 +52,12 @@ class _LoginPageState extends State<LoginPage> {
         if (jsonResponse['data']['is_admin'] == "0") {
           box.write('nama', jsonResponse['data']['nama']);
           box.write('nip', jsonResponse['data']['nip']);
+          box.write('foto', jsonResponse['data']['foto']);
           Navigator.pushNamed(context, HomeUserScreen.route);
         } else {
           box.write('nama', jsonResponse['data']['nama']);
           box.write('nip', jsonResponse['data']['nip']);
+          box.write('foto', jsonResponse['data']['foto']);
           Navigator.pushNamed(context, Admin.route);
         }
       } else {

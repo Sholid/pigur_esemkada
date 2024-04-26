@@ -20,14 +20,11 @@ class _SplashPageState extends State<SplashPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(color: Color.fromARGB(255, 147, 159, 229)),
-        child: Center(
-          child: Image.asset(
-            "assets/img/logo.png",
-            height: 180,
-          ),
-        ),
+      body: Container(),
+      bottomNavigationBar: Image.asset(
+        "assets/img/screen_siswa.png",
+        height: 700,
+        width: 600,
       ),
     );
   }
