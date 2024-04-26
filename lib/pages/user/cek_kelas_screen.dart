@@ -14,8 +14,16 @@ class CekKelasScreen extends StatefulWidget {
 
 class _CekKelasScreenState extends State<CekKelasScreen> {
   final List<String> genderItems = [
-    'Laki-laki',
-    'Perempuan',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
   ];
   String? selectedValue;
 

@@ -57,7 +57,11 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                         width: 80,
                         height: 80,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF1852E),
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  "https://t9xfkx7g-80.asse.devtunnels.ms/Api_pigur/" +
+                                      box.read('foto')),
+                              fit: BoxFit.fitHeight),
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
