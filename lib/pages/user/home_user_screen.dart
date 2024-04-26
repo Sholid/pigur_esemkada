@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_prjct/pages/login/login_page.dart';
+import 'package:flutter_app_prjct/pages/user/cek_kelas_screen.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeUserScreen extends StatefulWidget {
-  static const String route = '/home-user-screen';
+  // static const route = "/homeuserscreen";
+  static const String route = '/homeuserscreen';
   const HomeUserScreen({super.key});
 
   @override
@@ -46,8 +49,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                         spreadRadius: 0,
                       ),
                     ],
-                    border:
-                        Border.all(color: const Color(0xFFF1852E), width: 1),
+                    border: Border.all(color: const Color(0xFFF1852E), width: 1),
                   ),
                   child: Row(
                     children: [
@@ -164,10 +166,12 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                     itemCount: 5,
                     itemBuilder: (context, index) {
                       return InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(context, CekKelasScreen.route);
+                        },
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 16),
-                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           decoration: BoxDecoration(
                             color: const Color(0xFFCBF3F0),
                             borderRadius: BorderRadius.circular(8),
@@ -176,9 +180,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                             child: Text(
                               "Tanggaal  03-06-2024",
                               style: GoogleFonts.inter(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black),
+                                  fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
                             ),
                           ),
                         ),
@@ -190,22 +192,27 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        height: 38,
-        width: MediaQuery.of(context).size.width - 48,
-        decoration: BoxDecoration(
-          color: const Color(0xFFFB8500),
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: Text(
-          "Log Out",
-          textAlign: TextAlign.center,
-          style: GoogleFonts.poppins(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
+      floatingActionButton: InkWell(
+        onTap: () {
+          Navigator.pushReplacementNamed(context, LoginPage.route);
+        },
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          height: 48,
+          width: MediaQuery.of(context).size.width - 48,
+          decoration: BoxDecoration(
+            color: const Color(0xFFFB8500),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            "Log Out",
+            textAlign: TextAlign.center,
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
           ),
         ),
       ),

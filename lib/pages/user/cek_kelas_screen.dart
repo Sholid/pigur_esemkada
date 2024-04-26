@@ -33,8 +33,7 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
                   height: 24,
                 ),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   decoration: BoxDecoration(
                     color: const Color(0xFF9381FF),
                     borderRadius: BorderRadius.circular(6),
@@ -42,7 +41,9 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
                   child: Row(
                     children: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
                         child: const Icon(
                           size: 46,
                           Icons.arrow_circle_left_rounded,
@@ -96,9 +97,7 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
                             child: Text(
                               "Jam ke 1",
                               style: GoogleFonts.inter(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black),
+                                  fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
                             ),
                           ),
                         ),
@@ -173,8 +172,7 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
                             DropdownButtonFormField2<String>(
                               isExpanded: true,
                               decoration: InputDecoration(
-                                contentPadding:
-                                    const EdgeInsets.symmetric(vertical: 16),
+                                contentPadding: const EdgeInsets.symmetric(vertical: 16),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),

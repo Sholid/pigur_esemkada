@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_prjct/pages/admin/home_admin.dart';
 import 'package:flutter_app_prjct/pages/login/controller.dart';
+import 'package:flutter_app_prjct/pages/user/home_user_screen.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -48,34 +49,20 @@ class _LoginPageState extends State<LoginPage> {
     if (response.statusCode == 200) {
       var jsonResponse = response.data;
       if (jsonResponse['status'] == 1) {
-        box.write('nama', jsonResponse['data']['nama']);
-        box.write('nip', jsonResponse['data']['nip']);
-        Navigator.pushNamed(context, Admin.route);
+        if (jsonResponse['data']['is_admin'] == "0") {
+          box.write('nama', jsonResponse['data']['nama']);
+          box.write('nip', jsonResponse['data']['nip']);
+          Navigator.pushNamed(context, HomeUserScreen.route);
+        } else {
+          box.write('nama', jsonResponse['data']['nama']);
+          box.write('nip', jsonResponse['data']['nip']);
+          Navigator.pushNamed(context, Admin.route);
+        }
       } else {
-        print('Gagal');
+        print("Gagal : ${response.statusCode}");
       }
-    } else {
-      print("Gagal : ${response.statusCode}");
     }
-    // } catch (e) {
-    //   print("Error : $e");
-    // }
   }
-
-  // Future ceklogin() async {
-  //   var response;
-  //   // var uri = Uri.parse('http://localhost/API_belajarflutter/insert.php');
-  //   var uri = Uri.parse('http://192.168.14.182/Api_pigur/user/login.php');
-  //   response = await http.post(uri, body: {
-  //     "username": _user.text,
-  //     "password": _password.text,
-  //   });
-  //   if (response.statusCode == 200) {
-  //     print('Sukses');
-  //   } else {
-  //     print('Gagal');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -132,8 +119,8 @@ class _LoginPageState extends State<LoginPage> {
                     // keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       labelText: 'Username',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                      border:
+                          OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -149,8 +136,8 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: const InputDecoration(
                       suffixIcon: Icon(Icons.remove_red_eye),
                       labelText: 'Password',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                      border:
+                          OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -172,9 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: Text(
                           style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
-                              color: Colors.white),
+                              fontWeight: FontWeight.w500, fontSize: 14, color: Colors.white),
                           'Login'),
                     ),
                   ),
