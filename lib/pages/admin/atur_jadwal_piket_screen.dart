@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:multi_dropdown/models/chip_config.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 
 class AturJadwalPiketScreen extends StatefulWidget {
   static const String route = '/atur-jadwal-piket-screen';
@@ -337,60 +339,59 @@ class _AturJadwalPiketScreenState extends State<AturJadwalPiketScreen> {
                 const SizedBox(
                   height: 8,
                 ),
-                DropdownButtonFormField2<String>(
-                  isExpanded: true,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(vertical: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                MultiSelectDropDown<String>(
+                  dropdownBackgroundColor: Colors.white,
+                  searchEnabled: true,
+                  dropdownBorderRadius: 12,
+                  searchLabel: "Cari",
+                  borderColor: const Color(0xFFCCCCCC),
+                  borderWidth: 1.5,
+                  borderRadius: 12,
+                  alwaysShowOptionIcon: false,
+                  hintFontSize: 12,
+                  hintColor: const Color(0xFFCCCCCC),
+                  animateSuffixIcon: false,
+                  hintPadding: const EdgeInsets.symmetric(horizontal: 10),
+                  hint: "Daftar siswa yang sakit",
+                  hintStyle: GoogleFonts.poppins(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFFCCCCCC),
                   ),
-                  hint: Text(
-                    '--Pilihan Kelas--',
-                    style: GoogleFonts.poppins(
+                  onOptionSelected:
+                      (List<ValueItem<String>> selectedOptions) {},
+                  options: [
+                    ValueItem<String>(label: "1", value: "1"),
+                    ValueItem<String>(label: "2", value: "2"),
+                    ValueItem<String>(label: "3", value: "3"),
+                  ],
+                  selectionType: SelectionType.multi,
+                  chipConfig: const ChipConfig(
+                    deleteIconColor: Colors.white,
+                    labelColor: Colors.white,
+                    padding: EdgeInsets.all(6),
+                    radius: 8,
+                    labelStyle: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xFF040F0F),
+                      color: Colors.white,
                     ),
-                  ),
-                  items: genderItems
-                      .map((item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                          ))
-                      .toList(),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Please select gender.';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    //Do something when selected item is changed.
-                  },
-                  onSaved: (value) {
-                    selectedValue = value.toString();
-                  },
-                  buttonStyleData: const ButtonStyleData(
-                    padding: EdgeInsets.only(right: 8),
-                  ),
-                  iconStyleData: const IconStyleData(
-                    icon: Icon(Icons.keyboard_arrow_down_rounded),
-                    iconSize: 24,
-                  ),
-                  dropdownStyleData: DropdownStyleData(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
+                    deleteIcon: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 14,
                     ),
+                    wrapType: WrapType.wrap,
+                    backgroundColor: Colors.red,
                   ),
-                  menuItemStyleData: const MenuItemStyleData(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                  searchBackgroundColor: Colors.white,
+                  dropdownHeight: 300,
+                  optionTextStyle: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12,
+                    color: Colors.black,
                   ),
+                  selectedOptionIcon: const Icon(Icons.check_circle),
                 ),
                 const SizedBox(
                   height: 16,
