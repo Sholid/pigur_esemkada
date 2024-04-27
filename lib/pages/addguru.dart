@@ -1,10 +1,9 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_prjct/pages/admin/home_admin.dart';
+import 'package:flutter_app_prjct/service/user_service.dart';
 
-// void main() {
-//   runApp(const MyApp());
-// }
+// Class Guru/user
 class Guru extends StatefulWidget {
   static const route = "/Guru";
   const Guru({super.key});
@@ -13,6 +12,7 @@ class Guru extends StatefulWidget {
   State<Guru> createState() => _GuruState();
 }
 
+//extend properti dari state widget dari class guru
 class _GuruState extends State<Guru> {
   TextEditingController namaController = TextEditingController();
   TextEditingController nipController = TextEditingController();
@@ -20,6 +20,10 @@ class _GuruState extends State<Guru> {
   TextEditingController mapelController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController teleponController = TextEditingController();
+  //variabel formkey
+  final formKey = GlobalKey<FormState>();
+
   //Opsi value Jenis kelamin
   final List<String> genderItems = [
     'Laki-laki',
@@ -42,7 +46,6 @@ class _GuruState extends State<Guru> {
             shrinkWrap: true,
             children: [
               const Text('Nama'),
-
               TextField(
                 controller: namaController,
                 decoration: const InputDecoration(
@@ -55,7 +58,6 @@ class _GuruState extends State<Guru> {
                 height: 10,
               ),
               const Text('NIP'),
-
               TextField(
                 controller: nipController,
                 decoration: const InputDecoration(
@@ -68,7 +70,6 @@ class _GuruState extends State<Guru> {
                 height: 5,
               ),
               const Text('Jenis Kelamin'),
-
               DropdownButtonFormField2<String>(
                 isExpanded: true,
                 decoration: InputDecoration(
@@ -102,6 +103,7 @@ class _GuruState extends State<Guru> {
                   return null;
                 },
                 onChanged: (value) {
+                  selectedValue = value.toString();
                   //Do something when selected item is changed.
                 },
                 onSaved: (value) {
@@ -126,7 +128,7 @@ class _GuruState extends State<Guru> {
                   padding: EdgeInsets.symmetric(horizontal: 16),
                 ),
               ),
-              //Mapel
+              // input teks data mapel
               const SizedBox(
                 height: 10,
               ),
@@ -143,7 +145,7 @@ class _GuruState extends State<Guru> {
               ),
               const Text('Telepon'),
               TextField(
-                controller: mapelController,
+                controller: teleponController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Telepon',
@@ -215,13 +217,23 @@ class _GuruState extends State<Guru> {
                   ),
                 ],
               ),
-              //create button for Simpan
+              //create button for Simpan data
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        bool res = await insertUser(
+                          namaController.text,
+                          nipController.text,
+                          selectedValue.toString(),
+                          mapelController.text,
+                          usernameController.text,
+                          passwordController.text,
+                          _value.toString(),
+                          teleponController.text,
+                        );
                         Navigator.popAndPushNamed(context, Guru.route);
                       },
                       style: ElevatedButton.styleFrom(
@@ -232,7 +244,7 @@ class _GuruState extends State<Guru> {
                   SizedBox(width: 5),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         Navigator.popAndPushNamed(context, Admin.route);
                       },
                       style: ElevatedButton.styleFrom(
@@ -244,23 +256,6 @@ class _GuruState extends State<Guru> {
                   ),
                 ],
               ),
-              // ElevatedButton(
-              //   onPressed: () {
-              //     //we will trying to print input
-              //     print(namaController.text);
-              //     print(nipController.text);
-              //     print(jklmController.text);
-              //     print(mapelController.text);
-              //     print(usernameController.text);
-              //     print(passwordController.text);
-              //   },
-              //   child: Text(
-              //     'Simpan',
-              //     style: TextStyle(
-              //       fontSize: 14,
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),
