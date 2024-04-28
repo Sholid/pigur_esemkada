@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_prjct/pages/login/login_page.dart';
 import 'package:flutter_app_prjct/pages/user/cek_kelas_screen.dart';
+import 'package:flutter_app_prjct/service/jadwal_service.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -49,7 +50,8 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                         spreadRadius: 0,
                       ),
                     ],
-                    border: Border.all(color: const Color(0xFFF1852E), width: 1),
+                    border:
+                        Border.all(color: const Color(0xFFF1852E), width: 1),
                   ),
                   child: Row(
                     children: [
@@ -154,7 +156,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                   height: 40,
                 ),
                 Text(
-                  "Jadwal Piket Bulan Juli",
+                  "Jadwal Piket Bulan ${getMonthName(DateTime.now().month)}",
                   style: GoogleFonts.inter(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
@@ -164,31 +166,50 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                 const SizedBox(
                   height: 16,
                 ),
-                ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, CekKelasScreen.route);
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 16),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFCBF3F0),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Tanggaal  03-06-2024",
-                              style: GoogleFonts.inter(
-                                  fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
-                            ),
-                          ),
-                        ),
-                      );
+                FutureBuilder(
+                    future: JadwalService().getListJadwal(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              final item = snapshot.data![index];
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, CekKelasScreen.route,
+                                      arguments: {
+                                        "tanggal": item.tanggal,
+                                        "id_jadwal": item.idJadwal,
+                                      });
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(bottom: 16),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFCBF3F0),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "Tanggal ${item.tanggal}",
+                                      style: GoogleFonts.inter(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            });
+                      } else if (snapshot.hasError) {
+                        return Text("Error: ${snapshot.error}");
+                      } else {
+                        return Text("Loading");
+                      }
                     }),
               ],
             ),
@@ -221,5 +242,36 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
         ),
       ),
     );
+  }
+
+  String getMonthName(int monthNumber) {
+    switch (monthNumber) {
+      case 1:
+        return 'Januari';
+      case 2:
+        return 'Februari';
+      case 3:
+        return 'Maret';
+      case 4:
+        return 'April';
+      case 5:
+        return 'Mei';
+      case 6:
+        return 'Juni';
+      case 7:
+        return 'Juli';
+      case 8:
+        return 'Agustus';
+      case 9:
+        return 'September';
+      case 10:
+        return 'Oktober';
+      case 11:
+        return 'November';
+      case 12:
+        return 'Desember';
+      default:
+        return '';
+    }
   }
 }

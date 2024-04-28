@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_prjct/service/jampel_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CekKelasScreen extends StatefulWidget {
@@ -29,6 +30,11 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    String tanggal = args['tanggal'];
+    String idJadwal = args['id_jadwal'];
+    print(idJadwal);
     return Scaffold(
       backgroundColor: Colors.white,
       body: ListView(
@@ -41,7 +47,8 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
                   height: 24,
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   decoration: BoxDecoration(
                     color: const Color(0xFF9381FF),
                     borderRadius: BorderRadius.circular(6),
@@ -73,7 +80,7 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
                             ),
                           ),
                           Text(
-                            "Tanggal : 03-06-2024",
+                            "Tanggal : $tanggal",
                             style: GoogleFonts.poppins(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
@@ -88,28 +95,45 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
                 const SizedBox(
                   height: 16,
                 ),
-                ListView.builder(
-                    itemCount: 3,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {},
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 16),
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFCBF3F0),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Jam ke 1",
-                              style: GoogleFonts.inter(
-                                  fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
-                            ),
-                          ),
-                        ),
-                      );
+                FutureBuilder(
+                    future: JampelService().getJampel(idJadwal),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data!.isNotEmpty) {
+                          return ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    margin: const EdgeInsets.only(bottom: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFCBF3F0),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Jam ke ${snapshot.data![index].jamKe}",
+                                        style: GoogleFonts.inter(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              });
+                        } else {
+                          return Text("Tidak ada data");
+                        }
+                      } else if (snapshot.hasError) {
+                        return Text("Wkwkw: ${snapshot.error}");
+                      } else {
+                        return Text("Loading");
+                      }
                     })
               ],
             ),
@@ -180,7 +204,8 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
                             DropdownButtonFormField2<String>(
                               isExpanded: true,
                               decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                                contentPadding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),

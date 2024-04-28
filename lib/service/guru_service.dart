@@ -9,13 +9,14 @@ class GuruService {
     'Content-Type': 'application/json',
   }));
   Future<List> getGuru() async {
-    final response =
-        await dio.get("https://t9xfkx7g-80.asse.devtunnels.ms/Api_pigur/user/view_users.php");
+    final response = await dio.get(
+        "https://pgc7n869-80.asse.devtunnels.ms/Api_pigur/user/view_users.php");
     print(response.statusCode);
     if (response.statusCode == 200) {
       print(response.data);
-      final result =
-          (jsonDecode(response.data) as List<dynamic>).map((e) => GuruModel.fromJson(e)).toList();
+      final result = (jsonDecode(response.data) as List<dynamic>)
+          .map((e) => GuruModel.fromJson(e))
+          .toList();
       return result;
     } else {
       return [];

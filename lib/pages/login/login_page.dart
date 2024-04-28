@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
   void ceklogin() async {
     // try {
     var response = await dio.post(
-      "https://t9xfkx7g-80.asse.devtunnels.ms/Api_pigur/user/login.php",
+      "https://pgc7n869-80.asse.devtunnels.ms/Api_pigur/user/login.php",
       data: FormData.fromMap({
         'username': _user.text,
         'password': _password.text,
@@ -49,15 +49,13 @@ class _LoginPageState extends State<LoginPage> {
     if (response.statusCode == 200) {
       var jsonResponse = response.data;
       if (jsonResponse['status'] == 1) {
+        box.write('id', jsonResponse['data']['id_user']);
+        box.write('nama', jsonResponse['data']['nama']);
+        box.write('nip', jsonResponse['data']['nip']);
+        box.write('foto', jsonResponse['data']['foto']);
         if (jsonResponse['data']['is_admin'] == "0") {
-          box.write('nama', jsonResponse['data']['nama']);
-          box.write('nip', jsonResponse['data']['nip']);
-          box.write('foto', jsonResponse['data']['foto']);
           Navigator.pushNamed(context, HomeUserScreen.route);
         } else {
-          box.write('nama', jsonResponse['data']['nama']);
-          box.write('nip', jsonResponse['data']['nip']);
-          box.write('foto', jsonResponse['data']['foto']);
           Navigator.pushNamed(context, Admin.route);
         }
       } else {
@@ -121,8 +119,8 @@ class _LoginPageState extends State<LoginPage> {
                     // keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       labelText: 'Username',
-                      border:
-                          OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8))),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -138,8 +136,8 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: const InputDecoration(
                       suffixIcon: Icon(Icons.remove_red_eye),
                       labelText: 'Password',
-                      border:
-                          OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8))),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -161,7 +159,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: Text(
                           style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w500, fontSize: 14, color: Colors.white),
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: Colors.white),
                           'Login'),
                     ),
                   ),
