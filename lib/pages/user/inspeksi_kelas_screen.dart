@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_prjct/service/detail_jadwal_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class InspeksiKelasScreen extends StatefulWidget {
@@ -21,6 +22,10 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    String idJampel = args['id_jampel'];
+    String jamKe = args['jam_ke'];
     return Scaffold(
       backgroundColor: Colors.white,
       body: ListView(
@@ -64,7 +69,7 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                             ),
                           ),
                           Text(
-                            "Jam Ke- 1",
+                            "Jam Ke- $jamKe",
                             style: GoogleFonts.poppins(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
@@ -93,32 +98,44 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                 const SizedBox(
                   height: 8,
                 ),
-                GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 10,
-                    ),
-                    itemCount: 12,
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext ctx, index) {
-                      return Container(
-                        height: 50,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.amber,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          "X RPL1",
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                      );
-                    }),
+                FutureBuilder(
+                    future: DetailJadwalService().getDetailJadwal(idJampel),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 10,
+                            ),
+                            itemCount: snapshot.data!.length,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext ctx, index) {
+                              final item = snapshot.data![index];
+                              return Container(
+                                height: 50,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.amber,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Text(
+                                  item.kelas,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                            });
+                      } else if (snapshot.hasError) {
+                        return Text("Wkwkw: ${snapshot.error}");
+                      } else {
+                        return Text("Loading");
+                      }
+                    })
               ],
             ),
           ),

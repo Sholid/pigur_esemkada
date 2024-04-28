@@ -44,8 +44,6 @@ class _LoginPageState extends State<LoginPage> {
         'password': _password.text,
       }),
     );
-    print('ghi');
-    print(response.data);
     if (response.statusCode == 200) {
       var jsonResponse = response.data;
       if (jsonResponse['status'] == 1) {

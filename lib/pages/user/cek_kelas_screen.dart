@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_prjct/pages/user/inspeksi_kelas_screen.dart';
 import 'package:flutter_app_prjct/service/jampel_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -30,7 +31,8 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     String tanggal = args['tanggal'];
     String idJadwal = args['id_jadwal'];
     print(idJadwal);
@@ -46,7 +48,8 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
                   height: 24,
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   decoration: BoxDecoration(
                     color: const Color(0xFF9381FF),
                     borderRadius: BorderRadius.circular(6),
@@ -103,10 +106,20 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 return InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      InspeksiKelasScreen.route,
+                                      arguments: {
+                                        "id_jampel": snapshot.data![index].id,
+                                        "jam_ke": snapshot.data![index].jamKe,
+                                      },
+                                    );
+                                  },
                                   child: Container(
                                     margin: const EdgeInsets.only(bottom: 16),
-                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
                                     decoration: BoxDecoration(
                                       color: const Color(0xFFCBF3F0),
                                       borderRadius: BorderRadius.circular(8),
@@ -201,7 +214,8 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
                             DropdownButtonFormField2<String>(
                               isExpanded: true,
                               decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                                contentPadding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
