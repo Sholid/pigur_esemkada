@@ -4,6 +4,7 @@ class DetailJadwalModel {
   String kelas;
   String idJampel;
   String jamKe;
+  String nama;
   String idUser;
   String status;
   String mapel;
@@ -11,6 +12,7 @@ class DetailJadwalModel {
   DetailJadwalModel({
     required this.id,
     required this.idKelas,
+    required this.nama,
     required this.kelas,
     required this.idJampel,
     required this.jamKe,
@@ -22,6 +24,7 @@ class DetailJadwalModel {
   factory DetailJadwalModel.fromJson(Map<String, dynamic> json) {
     return DetailJadwalModel(
         id: json['id_detail'],
+        nama: json['nama'],
         idKelas: json['id_kelas'],
         kelas: json['kelas'],
         idJampel: json['id_jampel'],

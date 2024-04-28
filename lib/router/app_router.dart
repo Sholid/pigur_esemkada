@@ -5,6 +5,7 @@ import 'package:flutter_app_prjct/pages/addguru.dart';
 import 'package:flutter_app_prjct/pages/admin/atur_jadwal_piket_screen.dart';
 import 'package:flutter_app_prjct/pages/admin/detail_inspeksi_screen.dart';
 import 'package:flutter_app_prjct/pages/admin/home_admin.dart';
+import 'package:flutter_app_prjct/pages/admin/laporan_piket_screen.dart';
 import 'package:flutter_app_prjct/pages/login/login_page.dart';
 import 'package:flutter_app_prjct/pages/splash/page.dart';
 import 'package:flutter_app_prjct/pages/user/cek_kelas_screen.dart';
@@ -22,5 +23,6 @@ class AppRouter {
     InspeksiKelasScreen.route: (context) => const InspeksiKelasScreen(),
     DetailInspeksiScreen.route: (context) => const DetailInspeksiScreen(),
     AturJadwalPiketScreen.route: (context) => const AturJadwalPiketScreen(),
+    LaporanPiketScreen.route: (context) => const LaporanPiketScreen(),
   };
 }

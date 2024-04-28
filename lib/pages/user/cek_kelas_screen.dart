@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_app_prjct/pages/user/inspeksi_kelas_screen.dart';
 import 'package:flutter_app_prjct/service/jampel_service.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,6 +28,7 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
     '9',
     '10',
   ];
+  TextEditingController cJamKe = TextEditingController();
   String? selectedValue;
 
   @override
@@ -246,7 +248,7 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
                                 return null;
                               },
                               onChanged: (value) {
-                                //Do something when selected item is changed.
+                                selectedValue = value;
                               },
                               onSaved: (value) {
                                 selectedValue = value.toString();
@@ -281,7 +283,12 @@ class _CekKelasScreenState extends State<CekKelasScreen> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      await JampelService().insert(
+                                          idJadwal, selectedValue.toString());
+                                      print("Berhasil");
+                                      Navigator.pop(context);
+                                    },
                                     child: Text(
                                       "Simpan",
                                       style: GoogleFonts.poppins(

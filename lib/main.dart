@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_prjct/pages/splash/page.dart';
 import 'package:flutter_app_prjct/router/app_router.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_storage/get_storage.dart';
 
 void main() async {
   await GetStorage.init();
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -25,7 +27,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             gapPadding: 0,
@@ -35,11 +38,13 @@ class MyApp extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,
-            textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            textStyle:
+                const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, background: Colors.white),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.blue, background: Colors.white),
       ),
       initialRoute: SplashPage.route,
       routes: AppRouter.routes,

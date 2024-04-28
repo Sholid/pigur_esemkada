@@ -2,7 +2,10 @@ import 'dart:ui';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_prjct/model/detail_jadwal_model.dart';
+import 'package:flutter_app_prjct/pages/admin/laporan_piket_screen.dart';
 import 'package:flutter_app_prjct/service/detail_jadwal_service.dart';
+import 'package:flutter_app_prjct/service/kelas_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class InspeksiKelasScreen extends StatefulWidget {
@@ -18,7 +21,14 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
     'Laki-laki',
     'Perempuan',
   ];
+  final List<String> status = [
+    'Hadir',
+    'Tidak Hadir',
+  ];
+  String? kelasDipilih;
   String? selectedValue;
+  TextEditingController cMapel = TextEditingController();
+  TextEditingController cKet = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +57,9 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                   child: Row(
                     children: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
                         child: const Icon(
                           size: 46,
                           Icons.arrow_circle_left_rounded,
@@ -113,19 +125,28 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                             shrinkWrap: true,
                             itemBuilder: (BuildContext ctx, index) {
                               final item = snapshot.data![index];
-                              return Container(
-                                height: 50,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.amber,
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: Text(
-                                  item.kelas,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, LaporanPiketScreen.route,
+                                      arguments: item as DetailJadwalModel);
+                                },
+                                child: Container(
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: item.status == "0"
+                                        ? Colors.red
+                                        : Colors.green,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Text(
+                                    item.kelas,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               );
@@ -183,7 +204,7 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                         ),
                       ),
                       Text(
-                        "Jam ke",
+                        "Kelas",
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -195,67 +216,77 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                       const SizedBox(
                         height: 8,
                       ),
-                      DropdownButtonFormField2<String>(
-                        isExpanded: true,
-                        decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 16),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        hint: Text(
-                          '--Pilihan Kelas--',
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: const Color(0xFF040F0F),
-                          ),
-                        ),
-                        items: genderItems
-                            .map((item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                    ),
+                      FutureBuilder(
+                          future: KelasService().getKelas(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return DropdownButtonFormField2<String>(
+                                isExpanded: true,
+                                decoration: InputDecoration(
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                ))
-                            .toList(),
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Please select gender.';
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          //Do something when selected item is changed.
-                        },
-                        onSaved: (value) {
-                          selectedValue = value.toString();
-                        },
-                        buttonStyleData: const ButtonStyleData(
-                          padding: EdgeInsets.only(right: 8),
-                        ),
-                        iconStyleData: const IconStyleData(
-                          icon: Icon(Icons.keyboard_arrow_down_rounded),
-                          iconSize: 24,
-                        ),
-                        dropdownStyleData: DropdownStyleData(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                        ),
-                        menuItemStyleData: const MenuItemStyleData(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                        ),
-                      ),
+                                ),
+                                hint: Text(
+                                  '--Pilihan Kelas--',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
+                                    color: const Color(0xFF040F0F),
+                                  ),
+                                ),
+                                items: snapshot.data!
+                                    .map((item) => DropdownMenuItem<String>(
+                                          value: item.id,
+                                          child: Text(
+                                            item.kelas,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ))
+                                    .toList(),
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Please select kelas.';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  kelasDipilih = value;
+                                },
+                                onSaved: (value) {
+                                  selectedValue = value.toString();
+                                },
+                                buttonStyleData: const ButtonStyleData(
+                                  padding: EdgeInsets.only(right: 8),
+                                ),
+                                iconStyleData: const IconStyleData(
+                                  icon: Icon(Icons.keyboard_arrow_down_rounded),
+                                  iconSize: 24,
+                                ),
+                                dropdownStyleData: DropdownStyleData(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                                menuItemStyleData: const MenuItemStyleData(
+                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                ),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text("Wkwkw: ${snapshot.error}");
+                            } else {
+                              return Text("Loading");
+                            }
+                          }),
                       const SizedBox(
                         height: 8,
                       ),
                       Text(
-                        "Kondisi kelas (ada guru / tidak ada guru)",
+                        "Status kehadiran",
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -277,14 +308,14 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                           ),
                         ),
                         hint: Text(
-                          '--Pilihan kondisi--',
+                          '--Pilihan--',
                           style: GoogleFonts.poppins(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
                             color: const Color(0xFF040F0F),
                           ),
                         ),
-                        items: genderItems
+                        items: status
                             .map((item) => DropdownMenuItem<String>(
                                   value: item,
                                   child: Text(
@@ -340,6 +371,7 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                         height: 8,
                       ),
                       TextField(
+                        controller: cMapel,
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 8, horizontal: 8),
@@ -352,7 +384,7 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                         height: 8,
                       ),
                       Text(
-                        "Nama Tugas",
+                        "Keterangan Tugas",
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -365,6 +397,7 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                         height: 8,
                       ),
                       TextField(
+                        controller: cKet,
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 8, horizontal: 8),
@@ -389,7 +422,15 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () async {
+                                  await DetailJadwalService().insert(
+                                      idJampel,
+                                      kelasDipilih.toString(),
+                                      selectedValue.toString(),
+                                      cMapel.text,
+                                      cKet.text);
+                                  Navigator.pop(context);
+                                },
                                 child: Text(
                                   "Simpan",
                                   style: GoogleFonts.poppins(

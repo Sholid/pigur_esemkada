@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final dio = Dio();
 
@@ -14,11 +15,8 @@ Future<bool> insertUser(String nama, String nip, String jklm, String mapel,
     "is_admin": is_admin,
     "telepon": telepon
   });
-  print(formData);
-  final response = await dio.post(
-      "https://pgc7n869-80.asse.devtunnels.ms/Api_pigur/user/user.php",
-      data: formData);
-  print(response.statusCode);
+  final response = await dio
+      .post("${dotenv.get('BASE_URL')}Api_pigur/user/user.php", data: formData);
   if (response.statusCode == 200) {
     return true;
   } else {

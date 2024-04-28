@@ -234,11 +234,19 @@ class _GuruState extends State<Guru> {
                           _value.toString(),
                           teleponController.text,
                         );
+                        if (res) {
+                          print("Berhasil");
+                        } else {
+                          print("Gagal");
+                        }
                         Navigator.popAndPushNamed(context, Guru.route);
                       },
                       style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-                      child: Text(style: TextStyle(fontWeight: FontWeight.w500), "Simpan"),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8))),
+                      child: Text(
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                          "Simpan"),
                     ),
                   ),
                   SizedBox(width: 5),
@@ -251,7 +259,9 @@ class _GuruState extends State<Guru> {
                           shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       )),
-                      child: Text(style: TextStyle(fontWeight: FontWeight.w500), "Selesai"),
+                      child: Text(
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                          "Selesai"),
                     ),
                   ),
                 ],

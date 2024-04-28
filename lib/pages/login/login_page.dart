@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_prjct/pages/admin/home_admin.dart';
 import 'package:flutter_app_prjct/pages/login/controller.dart';
 import 'package:flutter_app_prjct/pages/user/home_user_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -38,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
   void ceklogin() async {
     // try {
     var response = await dio.post(
-      "https://pgc7n869-80.asse.devtunnels.ms/Api_pigur/user/login.php",
+      "${dotenv.get('BASE_URL')}Api_pigur/user/login.php",
       data: FormData.fromMap({
         'username': _user.text,
         'password': _password.text,
@@ -47,13 +48,16 @@ class _LoginPageState extends State<LoginPage> {
     if (response.statusCode == 200) {
       var jsonResponse = response.data;
       if (jsonResponse['status'] == 1) {
+        box.write('isLogin', true);
         box.write('id', jsonResponse['data']['id_user']);
         box.write('nama', jsonResponse['data']['nama']);
         box.write('nip', jsonResponse['data']['nip']);
         box.write('foto', jsonResponse['data']['foto']);
         if (jsonResponse['data']['is_admin'] == "0") {
+          box.write('isAdmin', false);
           Navigator.pushNamed(context, HomeUserScreen.route);
         } else {
+          box.write('is_admin', true);
           Navigator.pushNamed(context, Admin.route);
         }
       } else {
