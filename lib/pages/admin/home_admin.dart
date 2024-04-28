@@ -147,7 +147,7 @@ class _AdminState extends State<Admin> {
                   const SizedBox(
                     height: 16,
                   ),
-                  // manggil data user
+                  // Memanggil data user
                   FutureBuilder(
                       future: GuruService().getGuru(),
                       builder: (context, snapshot) {

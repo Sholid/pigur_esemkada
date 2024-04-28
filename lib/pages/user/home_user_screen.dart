@@ -50,8 +50,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                         spreadRadius: 0,
                       ),
                     ],
-                    border:
-                        Border.all(color: const Color(0xFFF1852E), width: 1),
+                    border: Border.all(color: const Color(0xFFF1852E), width: 1),
                   ),
                   child: Row(
                     children: [
@@ -129,7 +128,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                   height: 8,
                 ),
                 Text(
-                  "1. Memastikan keamanan pembelajaran di semua kelas",
+                  "1. Memastikan siswa berda didalam kelas diwaktu pembelajaran",
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -137,7 +136,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                   ),
                 ),
                 Text(
-                  "2. Mengkondisikan kelas apabila guru tidak hadir",
+                  "2. Mengkondisikan pemebelajaran kelas apabila guru tidak hadir",
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -178,17 +177,14 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                               final item = snapshot.data![index];
                               return InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                      context, CekKelasScreen.route,
-                                      arguments: {
-                                        "tanggal": item.tanggal,
-                                        "id_jadwal": item.idJadwal,
-                                      });
+                                  Navigator.pushNamed(context, CekKelasScreen.route, arguments: {
+                                    "tanggal": item.tanggal,
+                                    "id_jadwal": item.idJadwal,
+                                  });
                                 },
                                 child: Container(
                                   margin: const EdgeInsets.only(bottom: 16),
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
                                   decoration: BoxDecoration(
                                     color: const Color(0xFFCBF3F0),
                                     borderRadius: BorderRadius.circular(8),

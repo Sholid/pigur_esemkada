@@ -91,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 16),
                   Center(
                     child: Text(
-                      "Selamat datang di",
+                      "Selamat datang Guru Piket di",
                       style: GoogleFonts.inter(
                         color: Colors.black,
                         fontWeight: FontWeight.w600,
