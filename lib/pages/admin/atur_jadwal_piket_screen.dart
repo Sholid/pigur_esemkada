@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app_prjct/service/guru_service.dart';
+import 'package:flutter_app_prjct/service/jadwal_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_dropdown/models/chip_config.dart';
@@ -21,6 +23,12 @@ class _AturJadwalPiketScreenState extends State<AturJadwalPiketScreen> {
     'Laki-laki',
     'Perempuan',
   ];
+  String? guruKoordDipilih;
+
+  List<String> guruKoord = [];
+  List<ValueItem<String>> dataGuruDipilih = [];
+  List<String> guruKoordId = [];
+
   String? selectedValue;
 
   DateTime? selectedDate1;
@@ -339,60 +347,85 @@ class _AturJadwalPiketScreenState extends State<AturJadwalPiketScreen> {
                 const SizedBox(
                   height: 8,
                 ),
-                MultiSelectDropDown<String>(
-                  dropdownBackgroundColor: Colors.white,
-                  searchEnabled: true,
-                  dropdownBorderRadius: 12,
-                  searchLabel: "Cari",
-                  borderColor: const Color(0xFFCCCCCC),
-                  borderWidth: 1.5,
-                  borderRadius: 12,
-                  alwaysShowOptionIcon: false,
-                  hintFontSize: 12,
-                  hintColor: const Color(0xFFCCCCCC),
-                  animateSuffixIcon: false,
-                  hintPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  hint: "Daftar siswa yang sakit",
-                  hintStyle: GoogleFonts.poppins(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: const Color(0xFFCCCCCC),
-                  ),
-                  onOptionSelected:
-                      (List<ValueItem<String>> selectedOptions) {},
-                  options: [
-                    ValueItem<String>(label: "1", value: "1"),
-                    ValueItem<String>(label: "2", value: "2"),
-                    ValueItem<String>(label: "3", value: "3"),
-                  ],
-                  selectionType: SelectionType.multi,
-                  chipConfig: const ChipConfig(
-                    deleteIconColor: Colors.white,
-                    labelColor: Colors.white,
-                    padding: EdgeInsets.all(6),
-                    radius: 8,
-                    labelStyle: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white,
-                    ),
-                    deleteIcon: Icon(
-                      Icons.close,
-                      color: Colors.white,
-                      size: 14,
-                    ),
-                    wrapType: WrapType.wrap,
-                    backgroundColor: Colors.red,
-                  ),
-                  searchBackgroundColor: Colors.white,
-                  dropdownHeight: 300,
-                  optionTextStyle: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12,
-                    color: Colors.black,
-                  ),
-                  selectedOptionIcon: const Icon(Icons.check_circle),
-                ),
+                FutureBuilder(
+                    future: GuruService().getGuru(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return MultiSelectDropDown<String>(
+                          dropdownBackgroundColor: Colors.white,
+                          searchEnabled: true,
+                          dropdownBorderRadius: 12,
+                          searchLabel: "Cari",
+                          borderColor: const Color(0xFFCCCCCC),
+                          borderWidth: 1.5,
+                          borderRadius: 12,
+                          alwaysShowOptionIcon: false,
+                          hintFontSize: 12,
+                          hintColor: const Color(0xFFCCCCCC),
+                          animateSuffixIcon: false,
+                          hintPadding:
+                              const EdgeInsets.symmetric(horizontal: 10),
+                          hint: "Daftar siswa yang sakit",
+                          hintStyle: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: const Color(0xFFCCCCCC),
+                          ),
+                          onOptionSelected:
+                              (List<ValueItem<String>> selectedOptions) {
+                            guruKoord.clear();
+                            guruKoordId.clear();
+                            dataGuruDipilih.clear();
+                            setState(() {
+                              selectedOptions.forEach((e) {
+                                guruKoord.add(e.label.toString());
+                              });
+                              selectedOptions.forEach((e) {
+                                guruKoordId.add(e.value.toString());
+                              });
+                              selectedOptions.forEach((e) {
+                                dataGuruDipilih.add(e);
+                              });
+                            });
+                          },
+                          options: snapshot.data!
+                              .map((e) =>
+                                  ValueItem<String>(label: e.nama, value: e.id))
+                              .toList(),
+                          selectionType: SelectionType.multi,
+                          chipConfig: const ChipConfig(
+                            deleteIconColor: Colors.white,
+                            labelColor: Colors.white,
+                            padding: EdgeInsets.all(6),
+                            radius: 8,
+                            labelStyle: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            ),
+                            deleteIcon: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 14,
+                            ),
+                            wrapType: WrapType.wrap,
+                            backgroundColor: Colors.red,
+                          ),
+                          searchBackgroundColor: Colors.white,
+                          dropdownHeight: 300,
+                          optionTextStyle: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
+                          selectedOptionIcon: const Icon(Icons.check_circle),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text("Error: ${snapshot.error}");
+                      } else {
+                        return Text("Loading");
+                      }
+                    }),
                 const SizedBox(
                   height: 16,
                 ),
@@ -418,14 +451,14 @@ class _AturJadwalPiketScreenState extends State<AturJadwalPiketScreen> {
                     ),
                   ),
                   hint: Text(
-                    '--Pilihan Kelas--',
+                    '--Pilihan Koordinator--',
                     style: GoogleFonts.poppins(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
                       color: const Color(0xFF040F0F),
                     ),
                   ),
-                  items: genderItems
+                  items: guruKoord
                       .map((item) => DropdownMenuItem<String>(
                             value: item,
                             child: Text(
@@ -443,7 +476,9 @@ class _AturJadwalPiketScreenState extends State<AturJadwalPiketScreen> {
                     return null;
                   },
                   onChanged: (value) {
-                    //Do something when selected item is changed.
+                    setState(() {
+                      guruKoordDipilih = value;
+                    });
                   },
                   onSaved: (value) {
                     selectedValue = value.toString();
@@ -471,7 +506,40 @@ class _AturJadwalPiketScreenState extends State<AturJadwalPiketScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF8B9DFE),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    print("Di tekan");
+                    List<Map<String, dynamic>> dataGuru = [];
+                    for (var element in dataGuruDipilih) {
+                      dataGuru.add({
+                        "user_id": int.parse(element.value.toString()),
+                        "is_koord": int.parse(
+                            (guruKoordDipilih == element.label) ? "1" : "0"),
+                      });
+                    }
+                    await JadwalService().insert(
+                        (selectedDate1 != null)
+                            ? DateFormat('d-MM-y')
+                                .format(selectedDate1 as DateTime)
+                            : null,
+                        (selectedDate2 != null)
+                            ? DateFormat('d-MM-y')
+                                .format(selectedDate2 as DateTime)
+                            : null,
+                        (selectedDate3 != null)
+                            ? DateFormat('d-MM-y')
+                                .format(selectedDate3 as DateTime)
+                            : null,
+                        (selectedDate4 != null)
+                            ? DateFormat('d-MM-y')
+                                .format(selectedDate4 as DateTime)
+                            : null,
+                        (selectedDate5 != null)
+                            ? DateFormat('d-MM-y')
+                                .format(selectedDate5 as DateTime)
+                            : null,
+                        dataGuru);
+                    Navigator.pop(context);
+                  },
                   child: Text(
                     "Simpan",
                     style: GoogleFonts.poppins(

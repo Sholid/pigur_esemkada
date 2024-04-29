@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_prjct/pages/addguru.dart';
+import 'package:flutter_app_prjct/pages/admin/atur_jadwal_piket_screen.dart';
 import 'package:flutter_app_prjct/pages/login/login_page.dart';
 import 'package:flutter_app_prjct/service/guru_service.dart';
 import 'package:get_storage/get_storage.dart';
@@ -48,7 +49,8 @@ class _AdminState extends State<Admin> {
                           spreadRadius: 0,
                         ),
                       ],
-                      border: Border.all(color: const Color(0xFFF1852E), width: 1),
+                      border:
+                          Border.all(color: const Color(0xFFF1852E), width: 1),
                     ),
                     child: Row(
                       children: [
@@ -121,6 +123,48 @@ class _AdminState extends State<Admin> {
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
                     ),
+                  ),
+                  const SizedBox(
+                    height: 14,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFB8500),
+                          ),
+                          onPressed: () {},
+                          child: Text(
+                            "Cek Kelas",
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFB8500),
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, AturJadwalPiketScreen.route);
+                          },
+                          child: Text(
+                            "Buat jadwal",
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 14,
@@ -201,7 +245,8 @@ class _AdminState extends State<Admin> {
                                       width: 12,
                                     ),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           // disi sesuai class Guru_model
@@ -260,8 +305,8 @@ class _AdminState extends State<Admin> {
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFF1852E),
-                              shape:
-                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100))),
                           child: Text(
                             "Tambah",
                             style: GoogleFonts.poppins(
@@ -280,8 +325,8 @@ class _AdminState extends State<Admin> {
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFF1852E),
-                              shape:
-                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100))),
                           child: Text(
                             "Logout",
                             style: GoogleFonts.poppins(
