@@ -1,11 +1,15 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_prjct/model/detail_jadwal_model.dart';
 import 'package:flutter_app_prjct/pages/admin/laporan_piket_screen.dart';
 import 'package:flutter_app_prjct/service/detail_jadwal_service.dart';
+import 'package:flutter_app_prjct/service/guru_service.dart';
 import 'package:flutter_app_prjct/service/kelas_service.dart';
+import 'package:flutter_app_prjct/service/mapel_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class InspeksiKelasScreen extends StatefulWidget {
@@ -25,8 +29,24 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
     'Hadir',
     'Tidak Hadir',
   ];
+  File? file;
+
+  Future<void> _pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png'],
+    );
+
+    if (result != null) {
+      file = File(result.files.single.path!);
+    }
+  }
+
   String? kelasDipilih;
-  String? selectedValue;
+  String? id_mapel;
+  String? id_guru;
+  String? status_dipilih;
+
   TextEditingController cMapel = TextEditingController();
   TextEditingController cKet = TextEditingController();
 
@@ -178,7 +198,7 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.9,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -186,287 +206,463 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                       topRight: Radius.circular(20),
                     ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: ListView(
                     children: [
-                      const SizedBox(
-                        height: 14,
-                      ),
-                      Center(
-                        child: Text(
-                          "Data inspeksi kelas ",
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 14,
                           ),
-                        ),
-                      ),
-                      Text(
-                        "Kelas",
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(
-                            0xFF040F0F,
+                          Center(
+                            child: Text(
+                              "Data inspeksi kelas ",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      FutureBuilder(
-                          future: KelasService().getKelas(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return DropdownButtonFormField2<String>(
-                                isExpanded: true,
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      const EdgeInsets.symmetric(vertical: 16),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                          Text(
+                            "Kelas",
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(
+                                0xFF040F0F,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          FutureBuilder(
+                              future: KelasService().getKelas(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return DropdownButtonFormField2<String>(
+                                    isExpanded: true,
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 16),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    hint: Text(
+                                      '--Pilihan Kelas--',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        color: const Color(0xFF040F0F),
+                                      ),
+                                    ),
+                                    items: snapshot.data!
+                                        .map((item) => DropdownMenuItem<String>(
+                                              value: item.id,
+                                              child: Text(
+                                                item.kelas,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ))
+                                        .toList(),
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return 'Please select kelas.';
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      kelasDipilih = value;
+                                    },
+                                    onSaved: (value) {},
+                                    buttonStyleData: const ButtonStyleData(
+                                      padding: EdgeInsets.only(right: 8),
+                                    ),
+                                    iconStyleData: const IconStyleData(
+                                      icon: Icon(
+                                          Icons.keyboard_arrow_down_rounded),
+                                      iconSize: 24,
+                                    ),
+                                    dropdownStyleData: DropdownStyleData(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    menuItemStyleData: const MenuItemStyleData(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                    ),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text("Wkwkw: ${snapshot.error}");
+                                } else {
+                                  return Text("Loading");
+                                }
+                              }),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            "Guru Pengampu",
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(
+                                0xFF040F0F,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          FutureBuilder(
+                              future: GuruService().getGuru(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return DropdownButtonFormField2<String>(
+                                    isExpanded: true,
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 16),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    hint: Text(
+                                      '--Pilihan--',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        color: const Color(0xFF040F0F),
+                                      ),
+                                    ),
+                                    items: snapshot.data!
+                                        .map((item) => DropdownMenuItem<String>(
+                                              value: item.id,
+                                              child: Text(
+                                                item.nama,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      id_guru = value;
+                                      //Do something when selected item is changed.
+                                    },
+                                    onSaved: (value) {},
+                                    buttonStyleData: const ButtonStyleData(
+                                      padding: EdgeInsets.only(right: 8),
+                                    ),
+                                    iconStyleData: const IconStyleData(
+                                      icon: Icon(
+                                          Icons.keyboard_arrow_down_rounded),
+                                      iconSize: 24,
+                                    ),
+                                    dropdownStyleData: DropdownStyleData(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    menuItemStyleData: const MenuItemStyleData(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                    ),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text("Wkwkw: ${snapshot.error}");
+                                } else {
+                                  return Text("Loading");
+                                }
+                              }),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            "Mata Pelajaran",
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(
+                                0xFF040F0F,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          FutureBuilder(
+                              future: MapelService().getMapel(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return DropdownButtonFormField2<String>(
+                                    isExpanded: true,
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 16),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    hint: Text(
+                                      '--Pilihan--',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        color: const Color(0xFF040F0F),
+                                      ),
+                                    ),
+                                    items: snapshot.data!
+                                        .map((item) => DropdownMenuItem<String>(
+                                              value: item.id,
+                                              child: Text(
+                                                item.mapel,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ))
+                                        .toList(),
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return 'Please select gender.';
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      //Do something when selected item is changed.
+                                    },
+                                    onSaved: (value) {
+                                      id_mapel = value.toString();
+                                    },
+                                    buttonStyleData: const ButtonStyleData(
+                                      padding: EdgeInsets.only(right: 8),
+                                    ),
+                                    iconStyleData: const IconStyleData(
+                                      icon: Icon(
+                                          Icons.keyboard_arrow_down_rounded),
+                                      iconSize: 24,
+                                    ),
+                                    dropdownStyleData: DropdownStyleData(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    menuItemStyleData: const MenuItemStyleData(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                    ),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text("Wkwkw: ${snapshot.error}");
+                                } else {
+                                  return Text("Loading");
+                                }
+                              }),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            "Status kehadiran",
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(
+                                0xFF040F0F,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          DropdownButtonFormField2<String>(
+                            isExpanded: true,
+                            decoration: InputDecoration(
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 16),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            hint: Text(
+                              '--Pilihan--',
+                              style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: const Color(0xFF040F0F),
+                              ),
+                            ),
+                            items: status
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Please select gender.';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              status_dipilih = value;
+                            },
+                            onSaved: (value) {},
+                            buttonStyleData: const ButtonStyleData(
+                              padding: EdgeInsets.only(right: 8),
+                            ),
+                            iconStyleData: const IconStyleData(
+                              icon: Icon(Icons.keyboard_arrow_down_rounded),
+                              iconSize: 24,
+                            ),
+                            dropdownStyleData: DropdownStyleData(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            menuItemStyleData: const MenuItemStyleData(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            "Keterangan Tugas",
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(
+                                0xFF040F0F,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          TextField(
+                            controller: cKet,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 8),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            "Foto",
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(
+                                0xFF040F0F,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          InkWell(
+                            onTap: _pickFile,
+                            child: Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1,
+                                    color: Colors.black,
                                   ),
-                                ),
-                                hint: Text(
-                                  '--Pilihan Kelas--',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                    color: const Color(0xFF040F0F),
-                                  ),
-                                ),
-                                items: snapshot.data!
-                                    .map((item) => DropdownMenuItem<String>(
-                                          value: item.id,
-                                          child: Text(
-                                            item.kelas,
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ))
-                                    .toList(),
-                                validator: (value) {
-                                  if (value == null) {
-                                    return 'Please select kelas.';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {
-                                  kelasDipilih = value;
-                                },
-                                onSaved: (value) {
-                                  selectedValue = value.toString();
-                                },
-                                buttonStyleData: const ButtonStyleData(
-                                  padding: EdgeInsets.only(right: 8),
-                                ),
-                                iconStyleData: const IconStyleData(
-                                  icon: Icon(Icons.keyboard_arrow_down_rounded),
-                                  iconSize: 24,
-                                ),
-                                dropdownStyleData: DropdownStyleData(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                                menuItemStyleData: const MenuItemStyleData(
-                                  padding: EdgeInsets.symmetric(horizontal: 16),
-                                ),
-                              );
-                            } else if (snapshot.hasError) {
-                              return Text("Wkwkw: ${snapshot.error}");
-                            } else {
-                              return Text("Loading");
-                            }
-                          }),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Text(
-                        "Status kehadiran",
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(
-                            0xFF040F0F,
+                                  borderRadius: BorderRadius.circular(8)),
+                              width: double.infinity,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [Text("Foto"), Icon(Icons.image)],
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      DropdownButtonFormField2<String>(
-                        isExpanded: true,
-                        decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 16),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                          const SizedBox(
+                            height: 8,
                           ),
-                        ),
-                        hint: Text(
-                          '--Pilihan--',
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: const Color(0xFF040F0F),
-                          ),
-                        ),
-                        items: status
-                            .map((item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: const TextStyle(
-                                      fontSize: 14,
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 70),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF8B9DFE),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      await DetailJadwalService().insert(
+                                          idJampel,
+                                          kelasDipilih.toString(),
+                                          id_guru.toString(),
+                                          id_mapel.toString(),
+                                          status_dipilih.toString(),
+                                          cKet.text,
+                                          file as File);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      "Simpan",
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-                                ))
-                            .toList(),
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Please select gender.';
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          //Do something when selected item is changed.
-                        },
-                        onSaved: (value) {
-                          selectedValue = value.toString();
-                        },
-                        buttonStyleData: const ButtonStyleData(
-                          padding: EdgeInsets.only(right: 8),
-                        ),
-                        iconStyleData: const IconStyleData(
-                          icon: Icon(Icons.keyboard_arrow_down_rounded),
-                          iconSize: 24,
-                        ),
-                        dropdownStyleData: DropdownStyleData(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                        ),
-                        menuItemStyleData: const MenuItemStyleData(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Text(
-                        "Mapel",
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(
-                            0xFF040F0F,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      TextField(
-                        controller: cMapel,
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 8),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Text(
-                        "Keterangan Tugas",
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(
-                            0xFF040F0F,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      TextField(
-                        controller: cKet,
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 8),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 70),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF8B9DFE),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                ),
+                                const SizedBox(
+                                  width: 12,
+                                ),
+                                Expanded(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF9CA3AF),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      "Tutup",
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                onPressed: () async {
-                                  await DetailJadwalService().insert(
-                                      idJampel,
-                                      kelasDipilih.toString(),
-                                      selectedValue.toString(),
-                                      cMapel.text,
-                                      cKet.text);
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  "Simpan",
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
+                              ],
                             ),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            Expanded(
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF8B9DFE),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  "Tutup",
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
