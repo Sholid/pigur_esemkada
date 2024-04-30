@@ -10,12 +10,10 @@ class GuruService {
     'Content-Type': 'application/json',
   }));
   Future<List> getGuru() async {
-    final response = await dio.get(
-        "${dotenv.get('BASE_URL')}Api_pigur/user/view_users.php");
+    final response = await dio.get("${dotenv.get('BASE_URL')}user/view_users.php");
     if (response.statusCode == 200) {
-      final result = (jsonDecode(response.data) as List<dynamic>)
-          .map((e) => GuruModel.fromJson(e))
-          .toList();
+      final result =
+          (jsonDecode(response.data) as List<dynamic>).map((e) => GuruModel.fromJson(e)).toList();
       return result;
     } else {
       return [];

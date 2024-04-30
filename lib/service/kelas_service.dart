@@ -8,12 +8,9 @@ class KelasService {
     'Content-Type': 'application/json',
   }));
   Future<List> getKelas() async {
-    final response =
-        await dio.get("${dotenv.get('BASE_URL')}Api_pigur/user/get-kelas.php");
+    final response = await dio.get("${dotenv.get('BASE_URL')}user/get-kelas.php");
     if (response.statusCode == 200) {
-      final result = (response.data as List<dynamic>)
-          .map((e) => KelasModel.fromJson(e))
-          .toList();
+      final result = (response.data as List<dynamic>).map((e) => KelasModel.fromJson(e)).toList();
       return result;
     } else {
       return [];

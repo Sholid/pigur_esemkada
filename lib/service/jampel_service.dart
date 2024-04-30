@@ -12,13 +12,11 @@ class JampelService {
     'Content-Type': 'application/json',
   }));
   Future<List> getJampel(String idJadwal) async {
-    final response = await dio.get(
-        "${dotenv.get('BASE_URL')}Api_pigur/user/get-jampel.php?id_jadwal=$idJadwal");
+    final response =
+        await dio.get("${dotenv.get('BASE_URL')}user/get-jampel.php?id_jadwal=$idJadwal");
     log(response.statusCode.toString());
     if (response.statusCode == 200) {
-      final result = (response.data as List<dynamic>)
-          .map((e) => JampelModel.fromJson(e))
-          .toList();
+      final result = (response.data as List<dynamic>).map((e) => JampelModel.fromJson(e)).toList();
       return result;
     } else {
       return [];
@@ -26,7 +24,7 @@ class JampelService {
   }
 
   Future<void> insert(String idJadwal, String jamKe) async {
-    await dio.post("${dotenv.get('BASE_URL')}Api_pigur/user/add-jampel.php",
+    await dio.post("${dotenv.get('BASE_URL')}user/add-jampel.php",
         data: FormData.fromMap({
           "id_jadwal": idJadwal,
           "jam_ke": jamKe,

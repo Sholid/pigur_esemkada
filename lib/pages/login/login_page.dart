@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
   void ceklogin() async {
     // try {
     var response = await dio.post(
-      "${dotenv.get('BASE_URL')}Api_pigur/user/login.php",
+      "${dotenv.get('BASE_URL')}user/login.php",
       data: FormData.fromMap({
         'username': _user.text,
         'password': _password.text,
@@ -121,8 +121,8 @@ class _LoginPageState extends State<LoginPage> {
                     // keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       labelText: 'Username',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                      border:
+                          OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -138,8 +138,8 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: const InputDecoration(
                       suffixIcon: Icon(Icons.remove_red_eye),
                       labelText: 'Password',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                      border:
+                          OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -161,9 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: Text(
                           style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
-                              color: Colors.white),
+                              fontWeight: FontWeight.w500, fontSize: 14, color: Colors.white),
                           'Login'),
                     ),
                   ),

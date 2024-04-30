@@ -14,8 +14,7 @@ class LaporanPiketScreen extends StatefulWidget {
 class _LaporanPiketScreenState extends State<LaporanPiketScreen> {
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as DetailJadwalModel;
+    final args = ModalRoute.of(context)!.settings.arguments as DetailJadwalModel;
     return Scaffold(
       backgroundColor: Colors.white,
       body: ListView(
@@ -28,8 +27,7 @@ class _LaporanPiketScreenState extends State<LaporanPiketScreen> {
                   height: 24,
                 ),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   decoration: BoxDecoration(
                     color: const Color(0xFF9381FF),
                     borderRadius: BorderRadius.circular(6),
@@ -107,8 +105,7 @@ class _LaporanPiketScreenState extends State<LaporanPiketScreen> {
                   height: 24,
                 ),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
                   decoration: BoxDecoration(
                     color: Color(0xFFFCF7F7),
                     borderRadius: BorderRadius.circular(10),
@@ -214,7 +211,7 @@ class _LaporanPiketScreenState extends State<LaporanPiketScreen> {
         children: [
           ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF8B9DFE),
+                backgroundColor: Color.fromARGB(255, 157, 157, 158),
               ),
               onPressed: () {},
               child: Text(
@@ -230,7 +227,7 @@ class _LaporanPiketScreenState extends State<LaporanPiketScreen> {
           ),
           ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF8B9DFE),
+                backgroundColor: Color.fromARGB(255, 113, 113, 114),
               ),
               onPressed: () {},
               child: Text(

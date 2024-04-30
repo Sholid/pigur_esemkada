@@ -32,8 +32,7 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     String idJampel = args['id_jampel'];
     String jamKe = args['jam_ke'];
     return Scaffold(
@@ -48,8 +47,7 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                   height: 24,
                 ),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   decoration: BoxDecoration(
                     color: const Color(0xFF9381FF),
                     borderRadius: BorderRadius.circular(6),
@@ -115,8 +113,7 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 4,
                               crossAxisSpacing: 20,
                               mainAxisSpacing: 10,
@@ -127,17 +124,14 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                               final item = snapshot.data![index];
                               return InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                      context, LaporanPiketScreen.route,
+                                  Navigator.pushNamed(context, LaporanPiketScreen.route,
                                       arguments: item as DetailJadwalModel);
                                 },
                                 child: Container(
                                   height: 50,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: item.status == "0"
-                                        ? Colors.red
-                                        : Colors.green,
+                                    color: item.status == "0" ? Colors.red : Colors.green,
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                   child: Text(
@@ -223,8 +217,7 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                               return DropdownButtonFormField2<String>(
                                 isExpanded: true,
                                 decoration: InputDecoration(
-                                  contentPadding:
-                                      const EdgeInsets.symmetric(vertical: 16),
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -301,8 +294,7 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                       DropdownButtonFormField2<String>(
                         isExpanded: true,
                         decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 16),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 16),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -373,8 +365,7 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                       TextField(
                         controller: cMapel,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 8),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -399,8 +390,7 @@ class _InspeksiKelasScreenState extends State<InspeksiKelasScreen> {
                       TextField(
                         controller: cKet,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 8),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),

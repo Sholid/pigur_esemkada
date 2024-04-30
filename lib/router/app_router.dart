@@ -21,6 +21,7 @@ class AppRouter {
     HomeUserScreen.route: (context) => const HomeUserScreen(),
     CekKelasScreen.route: (context) => const CekKelasScreen(),
     InspeksiKelasScreen.route: (context) => const InspeksiKelasScreen(),
+    // InspeksiKelasAdminScreen.route: (context) => const InspeksiKelasAdminScreen(),
     DetailInspeksiScreen.route: (context) => const DetailInspeksiScreen(),
     AturJadwalPiketScreen.route: (context) => const AturJadwalPiketScreen(),
     LaporanPiketScreen.route: (context) => const LaporanPiketScreen(),

@@ -10,12 +10,11 @@ class DetailJadwalService {
     'Content-Type': 'application/json',
   }));
   Future<List> getDetailJadwal(String idJampel) async {
-    final response = await dio.get(
-        "${dotenv.get('BASE_URL')}Api_pigur/user/get-detail-jadwal.php?id_jampel=$idJampel");
+    final response =
+        await dio.get("${dotenv.get('BASE_URL')}user/get-detail-jadwal.php?id_jampel=$idJampel");
     if (response.statusCode == 200) {
-      final result = (response.data as List<dynamic>)
-          .map((e) => DetailJadwalModel.fromJson(e))
-          .toList();
+      final result =
+          (response.data as List<dynamic>).map((e) => DetailJadwalModel.fromJson(e)).toList();
       return result;
     } else {
       return [];
@@ -29,8 +28,7 @@ class DetailJadwalService {
     String mapel,
     String ket,
   ) async {
-    await dio.post(
-        "${dotenv.get('BASE_URL')}Api_pigur/user/add-detail-jadwal.php",
+    await dio.post("${dotenv.get('BASE_URL')}user/add-detail-jadwal.php",
         data: FormData.fromMap({
           "id_jampel": idJampel,
           "id_kelas": idKelas,

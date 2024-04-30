@@ -49,8 +49,7 @@ class _AdminState extends State<Admin> {
                           spreadRadius: 0,
                         ),
                       ],
-                      border:
-                          Border.all(color: const Color(0xFFF1852E), width: 1),
+                      border: Border.all(color: const Color(0xFFF1852E), width: 1),
                     ),
                     child: Row(
                       children: [
@@ -60,8 +59,7 @@ class _AdminState extends State<Admin> {
                           decoration: BoxDecoration(
                             image: DecorationImage(
                                 image: NetworkImage(
-                                    "https://t9xfkx7g-80.asse.devtunnels.ms/Api_pigur/" +
-                                        box.read('foto')),
+                                    "https://piketesemkada.000webhostapp.com/" + box.read('foto')),
                                 fit: BoxFit.fitHeight),
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -134,7 +132,9 @@ class _AdminState extends State<Admin> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFFB8500),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            // Navigator.pushNamed(context, InspeksiKelasAdminScreen.route);
+                          },
                           child: Text(
                             "Cek Kelas",
                             style: GoogleFonts.poppins(
@@ -151,8 +151,7 @@ class _AdminState extends State<Admin> {
                             backgroundColor: const Color(0xFFFB8500),
                           ),
                           onPressed: () {
-                            Navigator.pushNamed(
-                                context, AturJadwalPiketScreen.route);
+                            Navigator.pushNamed(context, AturJadwalPiketScreen.route);
                           },
                           child: Text(
                             "Buat jadwal",
@@ -245,8 +244,7 @@ class _AdminState extends State<Admin> {
                                       width: 12,
                                     ),
                                     Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           // disi sesuai class Guru_model
@@ -305,8 +303,8 @@ class _AdminState extends State<Admin> {
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFF1852E),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100))),
+                              shape:
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
                           child: Text(
                             "Tambah",
                             style: GoogleFonts.poppins(
@@ -325,8 +323,8 @@ class _AdminState extends State<Admin> {
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFF1852E),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100))),
+                              shape:
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(100))),
                           child: Text(
                             "Logout",
                             style: GoogleFonts.poppins(
