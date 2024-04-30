@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_app_prjct/pages/admin/home_admin.dart';
 import 'package:flutter_app_prjct/pages/login/controller.dart';
 import 'package:flutter_app_prjct/pages/user/home_user_screen.dart';
@@ -36,32 +37,42 @@ class _LoginPageState extends State<LoginPage> {
     'Content-Type': 'application/json',
   }));
 
+  bool loading = false;
+
   void ceklogin() async {
     // try {
-    var response = await dio.post(
-      "${dotenv.get('BASE_URL')}user/login.php",
-      data: FormData.fromMap({
-        'username': _user.text,
-        'password': _password.text,
-      }),
-    );
-    if (response.statusCode == 200) {
-      var jsonResponse = response.data;
-      if (jsonResponse['status'] == 1) {
-        box.write('isLogin', true);
-        box.write('id', jsonResponse['data']['id_user']);
-        box.write('nama', jsonResponse['data']['nama']);
-        box.write('nip', jsonResponse['data']['nip']);
-        box.write('foto', jsonResponse['data']['foto']);
-        if (jsonResponse['data']['is_admin'] == "0") {
-          box.write('isAdmin', false);
-          Navigator.pushNamed(context, HomeUserScreen.route);
+    if (!loading) {
+      setState(() {
+        loading = true;
+      });
+      var response = await dio.post(
+        "${dotenv.get('BASE_URL')}user/login.php",
+        data: FormData.fromMap({
+          'username': _user.text,
+          'password': _password.text,
+        }),
+      );
+      setState(() {
+        loading = false;
+      });
+      if (response.statusCode == 200) {
+        var jsonResponse = response.data;
+        if (jsonResponse['status'] == 1) {
+          box.write('isLogin', true);
+          box.write('id', jsonResponse['data']['id_user']);
+          box.write('nama', jsonResponse['data']['nama']);
+          box.write('nip', jsonResponse['data']['nip']);
+          box.write('foto', jsonResponse['data']['foto']);
+          if (jsonResponse['data']['is_admin'] == "0") {
+            box.write('isAdmin', false);
+            Navigator.pushNamed(context, HomeUserScreen.route);
+          } else {
+            box.write('isAdmin', true);
+            Navigator.pushNamed(context, Admin.route);
+          }
         } else {
-          box.write('is_admin', true);
-          Navigator.pushNamed(context, Admin.route);
+          print("Gagal : ${response.statusCode}");
         }
-      } else {
-        print("Gagal : ${response.statusCode}");
       }
     }
   }
@@ -159,10 +170,26 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(100),
                         ),
                       ),
-                      child: Text(
-                          style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w500, fontSize: 14, color: Colors.white),
-                          'Login'),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w500, fontSize: 14, color: Colors.white),
+                              'Login'),
+                          Visibility(
+                            visible: loading,
+                            child: Container(
+                              width: 20,
+                              height: 20,
+                              margin: const EdgeInsets.only(left: 12),
+                              child: const CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 45),

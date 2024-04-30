@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_app_prjct/model/detail_jadwal_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -21,21 +23,39 @@ class DetailJadwalService {
     }
   }
 
+  Future<List> getAllDetailJadwal() async {
+    final response = await dio
+        .get("${dotenv.get('BASE_URL')}Api_pigur/user/get-detail-jadwal.php");
+    if (response.statusCode == 200) {
+      print(response.data);
+      final result = (response.data as List<dynamic>)
+          .map((e) => DetailJadwalModel.fromJson(e))
+          .toList();
+      return result;
+    } else {
+      return [];
+    }
+  }
+
   Future<void> insert(
     String idJampel,
     String idKelas,
-    String status,
+    String idUser,
     String mapel,
+    String status,
     String ket,
+    File foto,
   ) async {
     await dio.post("${dotenv.get('BASE_URL')}user/add-detail-jadwal.php",
         data: FormData.fromMap({
           "id_jampel": idJampel,
           "id_kelas": idKelas,
           "id_user": box.read('id'),
+          "id_mapel": mapel,
           "status": status == "Hadir" ? "1" : "0",
-          "mapel": mapel,
           "ket": ket,
+          "foto": await MultipartFile.fromFile(foto.path,
+              filename: foto.path.split('/').last),
         }));
     print("Sudah");
   }

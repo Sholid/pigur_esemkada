@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
       const Duration(seconds: 2),
       () {
         if (box.read('isLogin') ?? false == true) {
-          if (box.read('isAdmin') ?? false) {
+          if (box.read('isAdmin') ?? false == true) {
             Navigator.pushReplacementNamed(context, Admin.route);
           } else {
             Navigator.pushReplacementNamed(context, HomeUserScreen.route);

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_prjct/model/guru_model.dart';
 import 'package:flutter_app_prjct/pages/addguru.dart';
 import 'package:flutter_app_prjct/pages/admin/atur_jadwal_piket_screen.dart';
+import 'package:flutter_app_prjct/pages/admin/inspeksi_admin_screen.dart';
 import 'package:flutter_app_prjct/pages/login/login_page.dart';
 import 'package:flutter_app_prjct/service/guru_service.dart';
 import 'package:get_storage/get_storage.dart';
@@ -16,6 +18,17 @@ class Admin extends StatefulWidget {
 
 class _AdminState extends State<Admin> {
   final box = GetStorage();
+  String cari = "";
+  late GuruService guruService;
+  late Future<List> listGuru;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    guruService = GuruService();
+    listGuru = guruService.getGuru();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +146,7 @@ class _AdminState extends State<Admin> {
                             backgroundColor: const Color(0xFFFB8500),
                           ),
                           onPressed: () {
-                            // Navigator.pushNamed(context, InspeksiKelasAdminScreen.route);
+                            Navigator.pushNamed(context, InspeksiAdminScreen.route);
                           },
                           child: Text(
                             "Cek Kelas",
@@ -169,6 +182,11 @@ class _AdminState extends State<Admin> {
                     height: 14,
                   ),
                   TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        cari = value;
+                      });
+                    },
                     decoration: InputDecoration(
                       hintText: "Cari data guru",
                       prefixIcon: Icon(
@@ -192,16 +210,23 @@ class _AdminState extends State<Admin> {
                   ),
                   // Memanggil data user
                   FutureBuilder(
-                      future: GuruService().getGuru(),
+                      future: listGuru,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
+                          List<GuruModel> gurus = snapshot.data as List<GuruModel>;
+                          gurus = snapshot.data!
+                              .where((element) => element.nama
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(cari.toLowerCase()))
+                              .toList() as List<GuruModel>;
                           return ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: snapshot.data!.length,
+                            itemCount: gurus.length,
                             itemBuilder: (context, index) {
                               /// Varibale snapshot
-                              final item = snapshot.data![index];
+                              final item = gurus[index];
                               return Container(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 padding: const EdgeInsets.all(12),
@@ -234,7 +259,7 @@ class _AdminState extends State<Admin> {
                                         image: DecorationImage(
                                             image: NetworkImage(
                                                 "https://t9xfkx7g-80.asse.devtunnels.ms/Api_pigur/" +
-                                                    item.foto),
+                                                    item.foto.toString()),
                                             fit: BoxFit.fitHeight),
                                         color: Color.fromRGBO(255, 255, 254, 1),
                                         borderRadius: BorderRadius.circular(12),
@@ -319,6 +344,8 @@ class _AdminState extends State<Admin> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
+                            box.remove('isLogin');
+                            box.remove('isAdmin');
                             Navigator.pushNamed(context, LoginPage.route);
                           },
                           style: ElevatedButton.styleFrom(

@@ -110,92 +110,112 @@ class _LaporanPiketScreenState extends State<LaporanPiketScreen> {
                     color: Color(0xFFFCF7F7),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Row(
+                  child: Column(
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
                         children: [
-                          Text(
-                            "Jam Ke",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Jam Ke",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                "Kelas",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                "Guru",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                "Mapel",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                "Status Guru",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                "Keterangan",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            "Kelas",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                            ),
+                          const SizedBox(
+                            width: 12,
                           ),
-                          Text(
-                            "Guru",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                            ),
-                          ),
-                          Text(
-                            "Mapel",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                            ),
-                          ),
-                          Text(
-                            "Status Guru",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                            ),
-                          ),
-                          Text(
-                            "Keterangan",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                ": ${args.jamKe}",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                ": ${args.kelas}",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                ": ${args.nama}",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                ": ${args.mapel}",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                ": ${args.status == "0" ? "Tidak Hadir" : "Hadir"}",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                ": ${args.ket}",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                       const SizedBox(
-                        width: 12,
+                        height: 12,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            ": ${args.jamKe}",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                            ),
-                          ),
-                          Text(
-                            ": ${args.kelas}",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                            ),
-                          ),
-                          Text(
-                            ": ${args.nama}",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                            ),
-                          ),
-                          Text(
-                            ": ${args.mapel}",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                            ),
-                          ),
-                          Text(
-                            ": ${args.status == "0" ? "Tidak Hadir" : "Hadir"}",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                            ),
-                          ),
-                          Text(
-                            ": ${args.ket}",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
+                      Container(
+                        height: 150,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          image:
+                              DecorationImage(image: NetworkImage(args.foto)),
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 12,
                       ),
                     ],
                   ),
